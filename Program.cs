@@ -95,7 +95,7 @@ namespace QC15_TV_Serial
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
 
-                            Console.WriteLine("Writen");
+                            //Console.WriteLine("Writen");
 
                     }
                 }
