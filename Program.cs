@@ -14,11 +14,11 @@ namespace QC15_TV_Serial
         static void Main(string[] args)
         {
 
-            Console.WriteLine("COM Port (COM3):");
+            Console.WriteLine("COM Port (COM4):");
             String comm = Console.ReadLine();
             if(comm == null || comm == "")
             {
-                comm = "COM3";
+                comm = "COM4";
             }
             Console.WriteLine(comm);
 
