@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
+using System.Data.SqlClient;
 
 namespace QC15_TV_Serial
 {
@@ -46,9 +47,6 @@ namespace QC15_TV_Serial
             }
 
 
-
-            
-
         }
 
         private static void onReceiveData(object sender,
@@ -56,10 +54,54 @@ namespace QC15_TV_Serial
         {
             SerialPort spL = (SerialPort)sender;
 
-            Console.WriteLine(spL.ReadLine());
+            String line = spL.ReadLine();
+            char[] charLine = line.ToCharArray();
+
+            try
+            {
+                if (charLine[0] == '3')
+                {
+                    String[] fileData = createFileData(line);
+                    updateFileData(fileData);
+                }
+            }
+            catch (Exception es)
+            {
+                Console.WriteLine(es.Message);
+            }
+
 
         }
 
-       
+        private static String[] createFileData(String file)
+        {
+            String[] fileData = new string[3];
+
+            Char delimiter = ',';
+            fileData = file.Split(delimiter);
+
+            return fileData;
+        }
+
+       private static void updateFileData(String[] fileData)
+        {
+            string sqlQuery = "UPDATE badges SET [" + fileData[2] + "] = convert(binary(10), '" + fileData[3] + "', 1), [lastseen] = SYSDATETIME() WHERE[id0] = " + fileData[1];
+
+            using (SqlConnection con = new SqlConnection(sqlcon))
+            {
+                con.Open();
+                using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                            Console.WriteLine("Writen");
+
+                    }
+                }
+            }
+
+            
+        }
     }
 }
