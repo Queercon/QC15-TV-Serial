@@ -14,18 +14,37 @@ namespace QC15_TV_Serial
         static void Main(string[] args)
         {
 
-
-            if(args.Length == 3)
+            Console.WriteLine("COM Port (COM3):");
+            String comm = Console.ReadLine();
+            if(comm == null || comm == "")
             {
-                sqlcon = "server = " + args[1] + "; database = badge; UID = tv; password = 2az8wA4LxuQRIIH9";
+                comm = "COM3";
+            }
+            Console.WriteLine(comm);
 
-                SerialPort port = new SerialPort(args[0], 9600, Parity.None, 8, StopBits.One);
+            Console.WriteLine("IP (127.0.0.1):");
+            String ip = Console.ReadLine();
+            if (ip == null || ip == "")
+            {
+                ip = "127.0.0.1";
+            }
+            Console.WriteLine(ip);
+
+            Console.WriteLine("Debug (0):");
+            String debug = Console.ReadLine();
+            if (debug == null || debug == "")
+            {
+                debug = "0";
+            }
+            Console.WriteLine(debug);
+
+            sqlcon = "server = " + ip + "; database = badge; UID = tv; password = 2az8wA4LxuQRIIH9";
+
+                SerialPort port = new SerialPort(comm, 9600, Parity.None, 8, StopBits.One);
+
+
                 
-
-                Console.WriteLine(args[0]);
-                //Console.WriteLine(sqlcon);
-
-                if (args[2] == "0")
+                if (debug == "0")
                 {
                     port.DataReceived += onReceiveData;
                     port.Open();
@@ -35,16 +54,11 @@ namespace QC15_TV_Serial
                 Console.ReadLine();
                 Console.ReadLine();
 
-                if (args[2] == "0")
+                if (debug == "0")
                 {
                     port.Close();
                 }
-            }
-            else
-            {
-                Console.WriteLine("Your missing variables.. COM IP DEMO");
-                Console.ReadLine();
-            }
+
 
 
         }
