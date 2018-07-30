@@ -59,10 +59,15 @@ namespace QC15_TV_Serial
 
             try
             {
+                String[] data = createSplitData(line);
+
                 if (charLine[0] == '3')
                 {
-                    String[] fileData = createFileData(line);
-                    updateFileData(fileData);
+                    updateFileData(data);
+                }
+                if (charLine[0] == '4')
+                {
+                    updateBadgeStats(data);
                 }
             }
             catch (Exception es)
@@ -73,17 +78,17 @@ namespace QC15_TV_Serial
 
         }
 
-        private static String[] createFileData(String file)
+        private static String[] createSplitData(String txt)
         {
-            String[] fileData = new string[3];
+            String[] splitData = new string[15];
 
             Char delimiter = ',';
-            fileData = file.Split(delimiter);
+            splitData = txt.Split(delimiter);
 
-            return fileData;
+            return splitData;
         }
 
-       private static void updateFileData(String[] fileData)
+        private static void updateFileData(String[] fileData)
         {
             string sqlQuery = "UPDATE badges SET [" + fileData[2] + "] = convert(binary(10), '" + fileData[3] + "', 1), [lastseen] = SYSDATETIME() WHERE[id0] = " + fileData[1];
 
@@ -102,6 +107,27 @@ namespace QC15_TV_Serial
             }
 
             
+        }
+
+        private static void updateBadgeStats(String[] badgeData)
+        {
+            string sqlQuery = "UPDATE[dbo].[badgestats] SET [lastseen] = SYSDATETIME() ,[badges_seen] = " + badgeData[2] + " ,[badges_connected] = " + badgeData[3] + " ,[badges_uploaded] = " + badgeData[4] + " ,[ubers_seen] = " + badgeData[5] + " ,[ubers_connected] = " + badgeData[6] + "  ,[ubers_uploaded] = " + badgeData[7] + " ,[handlers_seen] = " + badgeData[8] + " ,[handlers_connected] = " + badgeData[9] + " ,[handlers_uploaded] = " + badgeData[10] + " WHERE[id0] = " + badgeData[1];
+
+            using (SqlConnection con = new SqlConnection(sqlcon))
+            {
+                con.Open();
+                using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        //Console.WriteLine("Writen");
+
+                    }
+                }
+            }
+
+
         }
     }
 }
