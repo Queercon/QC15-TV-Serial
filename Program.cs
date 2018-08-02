@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace QC15_TV_Serial
 {
@@ -14,11 +15,11 @@ namespace QC15_TV_Serial
         static void Main(string[] args)
         {
 
-            Console.WriteLine("COM Port (COM4):");
+            Console.WriteLine("COM Port (COM6):");
             String comm = Console.ReadLine();
             if(comm == null || comm == "")
             {
-                comm = "COM4";
+                comm = "COM6";
             }
             Console.WriteLine(comm);
 
@@ -86,7 +87,7 @@ namespace QC15_TV_Serial
             }
             catch (Exception es)
             {
-                Console.WriteLine(es.Message);
+                Console.WriteLine(charLine[0] + ": " + es.Message);
             }
 
 
@@ -96,15 +97,28 @@ namespace QC15_TV_Serial
         {
             String[] splitData = new string[15];
 
+            Regex rgx = new Regex("[^a-zA-Z0-9 -$,0x960x9d?@]");
+            txt = rgx.Replace(txt, "");
+
             Char delimiter = ',';
             splitData = txt.Split(delimiter);
 
+            //Console.WriteLine("S0: " + splitData[0]);
+            //Console.WriteLine("S1: " + splitData[1]);
+            //Console.WriteLine("S2: " + splitData[2]);
+            //Console.WriteLine("S3: " + splitData[3]);
+            //Console.WriteLine("S4: " + splitData[4]);
             return splitData;
         }
 
         private static void updateFileData(String[] fileData)
         {
             string sqlQuery = "UPDATE badges SET [" + fileData[2] + "] = convert(binary(10), '" + fileData[3] + "', 1), [lastseen] = SYSDATETIME() WHERE[id0] = " + fileData[1];
+            //Console.WriteLine(sqlQuery);
+            //Console.WriteLine("F2: " + fileData[2]);
+            //Console.WriteLine("F3: " + fileData[3]);
+            //Console.WriteLine("F1: " + fileData[1]);
+
 
             using (SqlConnection con = new SqlConnection(sqlcon))
             {
