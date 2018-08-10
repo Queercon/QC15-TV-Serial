@@ -72,6 +72,8 @@ namespace QC15_TV_Serial
             String line = spL.ReadLine();
             char[] charLine = line.ToCharArray();
 
+            Console.WriteLine(line);
+
             try
             {
                 String[] data = createSplitData(line);
@@ -125,12 +127,15 @@ namespace QC15_TV_Serial
                 con.Open();
                 using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                 {
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
+                    //using (SqlDataReader reader = cmd.ExecuteReader())
+                    //{
 
-                            //Console.WriteLine("Writen");
+                    //        //Console.WriteLine("Writen");
 
-                    }
+                    //}
+
+                    int numberOfRecords = cmd.ExecuteNonQuery();
+                    Console.WriteLine("3 Rows Eff: " + numberOfRecords);
                 }
             }
 
@@ -146,12 +151,15 @@ namespace QC15_TV_Serial
                 con.Open();
                 using (SqlCommand cmd = new SqlCommand(sqlQuery, con))
                 {
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
+                    //using (SqlDataReader reader = cmd.ExecuteReader())
+                    //{
 
-                        //Console.WriteLine("Writen");
+                    //    Console.WriteLine(reader.);
 
-                    }
+                    //}
+
+                    int numberOfRecords = cmd.ExecuteNonQuery();
+                    Console.WriteLine("4 Rows Eff: " + numberOfRecords);
                 }
             }
 
