@@ -41,7 +41,7 @@ namespace QC15_TV_Serial
 
             sqlcon = "server = " + ip + "; database = badge; UID = tv; password = 2az8wA4LxuQRIIH9";
 
-                SerialPort port = new SerialPort(comm, 57600, Parity.None, 8, StopBits.One);
+                SerialPort port = new SerialPort(comm, 9600, Parity.None, 8, StopBits.One);
 
 
                 
